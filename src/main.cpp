@@ -9,6 +9,13 @@
 using nlohmann::json;
 using std::string;
 
+static constexpr double tau_p = 0.09;
+static constexpr double tau_i = 0.0004;
+static constexpr double tau_d = 1.7;
+static constexpr double THROTTLE = 0.3;
+static const vector<double> INCREMENT = {0.000001, 0.000000001, 0.00001};
+static const int MAX_STEPS = 7;
+
 // For converting back and forth between radians and degrees.
 constexpr double pi() { return M_PI; }
 double deg2rad(double x) { return x * pi() / 180; }
@@ -33,10 +40,9 @@ string hasData(string s) {
 int main() {
   uWS::Hub h;
 
+  //Initializing the PID Controller
   PID pid;
-  /**
-   * TODO: Initialize the pid variable.
-   */
+  pid.Init(tau_p,tau_i,tau_d);
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
                      uWS::OpCode opCode) {
@@ -48,7 +54,6 @@ int main() {
 
       if (s != "") {
         auto j = json::parse(s);
-
         string event = j[0].get<string>();
 
         if (event == "telemetry") {
@@ -57,24 +62,27 @@ int main() {
           double speed = std::stod(j[1]["speed"].get<string>());
           double angle = std::stod(j[1]["steering_angle"].get<string>());
           double steer_value;
-          /**
-           * TODO: Calculate steering value here, remember the steering value is
-           *   [-1, 1].
-           * NOTE: Feel free to play around with the throttle and speed.
-           *   Maybe use another PID controller to control the speed!
-           */
           
-          // DEBUG
-          std::cout << "CTE: " << cte << " Steering Value: " << steer_value 
-                    << std::endl;
+          pid.UpdateError(cte);
+          steer_value = pid.TotalError();
+          //Update Params
+          pid.Twiddle(INCREMENT, MAX_STEPS);
 
-          json msgJson;
-          msgJson["steering_angle"] = steer_value;
-          msgJson["throttle"] = 0.3;
-          auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          std::cout << msg << std::endl;
-          ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
-        }  // end "telemetry" if
+          std::cout
+              << "\n======[" << "DASHBOARD" << "]======"
+              << "\nCross Track Error:               " << cte
+              << "\nCurrent Speed:                   " << speed
+              << "\nCurrent Steering Angle:          " << angle
+              << "\nPID Corrected Steering:          " << steer_value
+              << "\nPID Steering Coefficients:       " <<   "Kp = " << pid.Kp_()
+                                                       << ", Ki = " << pid.Ki_()
+                                                       << ", Kd = " << pid.Kd_()
+              << "\n======[" "DASHBOARD" "]======\n"
+              << std::endl;
+
+          pid.ExecuteUpdate(steer_value, THROTTLE, ws);
+        }
+
       } else {
         // Manual driving
         string msg = "42[\"manual\",{}]";
