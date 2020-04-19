@@ -4,17 +4,17 @@ Udacity Self-Driving Car Nanodegree - PID Controller Project
 ![Driving](img/PREVIEW.png)
 
 ## Overview 
-The following project explores the controller-based approach to lane driving, as opposed to deep learning as seen in the [CarND-Behavioural-Cloning project.](https://github.com/ahtchow/CarND-BehaviouralCloning-P3) A more classical approach like using a controller can prove to have some benefits, especially if paired with deep learning (two approaches on opposite sides of the spectrum). Simply put, driving in the center of the lane can be much simplier if left in the hands of a feedback controller such as the proportional–integral–derivative controller. The objective of the controller is to tune the steering angle, through continously adjusting hyperparameters based on error. Let's see how I did it!
+The following project explores the controller-based approach to lane driving, as opposed to deep learning as seen in the [CarND-Behavioural-Cloning project.](https://github.com/ahtchow/CarND-BehaviouralCloning-P3) A more classical approach like using a controller can prove to have some benefits, especially if paired with deep learning (two approaches on opposite sides of the spectrum). Simply put, driving in the center of the lane can be much simpler if left in the hands of a feedback controller such as the proportional–integral–derivative controller. The objective of the controller is to tune the steering angle, through continuously adjusting hyperparameters based on error. Let's see how I did it!
 
 ## Goal of the Project
 * Implement a PID controller that measures error.
-* Implement an algorithim that adjusted hyperparameter dynamically.
-* Drive the autonomous car on the similator simply using the PID controller.
+* Implement an algorithm that adjusted hyperparameter dynamically.
+* Drive the autonomous car on the simulator simply using the PID controller.
 
 ## Components of the PID Controller
 
 ### "P" - Proportional
-The proportional aspect of the controller measures the magnitude of adjustment required in proportion to the "Cross Track" Error (CTE). The CTE measures the distance from center of the lane, thus the further away the vehicle is from the lane the higher the CTE. The proportional aspect of the controller can be modelled by the following equation:
+The proportional aspect of the controller measures the magnitude of adjustment required in proportion to the "Cross Track" Error (CTE). The CTE measures the distance from the center of the lane, thus the further away the vehicle is from the lane the higher the CTE. The proportional aspect of the controller can be modeled by the following equation:
 
 ```bash
 α = - τ_p * CTE
@@ -24,7 +24,7 @@ The proportional aspect of the controller measures the magnitude of adjustment r
   *  CTE -> Cross Track Error
 
 ### "I" - Integral
-The Integral aspect of the controller sums up all the "Cross Track" Error (CTE) to account for any biased to error. Suppose the wheels on your car has wheels that were out of allignment, as the car continued to drive a substantial amount of error would accumilate. To address any system bias, the integral controller will act as a dynamic offset to oppose the bias accumilated overtime. The integral aspect of the controller can be modelled by the following equation:
+The Integral aspect of the controller sums up all the "Cross Track" Error (CTE) to account for any biased to error. Suppose the wheels on your car has wheels that were out of alignment, as the car continued to drive a substantial amount of error would accumulate. To address any system bias, the integral controller will act as a dynamic offset to oppose the bias accumulated overtime. The integral aspect of the controller can be modeled by the following equation:
 
 ```bash
 α = - τ_i * (Σ CTE)
@@ -34,7 +34,7 @@ The Integral aspect of the controller sums up all the "Cross Track" Error (CTE) 
   *  Σ CTE -> Summation of Cross Track Error
 
 ### "D" - Derivative
-The Derivative aspect of the controller measures the rate of change "Cross Track" Error (CTE) over time. As a result, as the rate of change increases so will need to steer away from the current state. An example can be when the lane is curving, such that there is a sudden change of error. The derivative controller is responsible for accounting to the system's shift in state. The derivative aspect of the controller can be modelled by the following equation:
+The Derivative aspect of the controller measures the rate of change "Cross Track" Error (CTE) over time. As a result, as the rate of change increases so will need to steer away from the current state. An example can be when the lane is curving, such that there is a sudden change of error. The derivative controller accounts for the system's shift in state. The derivative aspect of the controller can be modeled by the following equation:
 
 ```bash
 α = - τ_d * (d/dt) * CTE
@@ -79,7 +79,7 @@ while sum(dp) > threshold:
                 dp[i] *= 0.95
 ```
 
-Though the basis of the algorithm were identical, the tuning was done in small increments (i.e 7 STEPS/ITERATION) due to the speed of updating. I did not want to have the system rapidly change the steering angle for no reason, but instead respond to the sharp corners within the map. Here are the initial values I selected for this project:
+Though the basis of the algorithm was identical, the tuning was done in small increments (i.e 7 STEPS/ITERATION) due to the speed of updating. I did not want to have the system rapidly change the steering angle for no reason, but instead respond to the sharp corners within the map. Here are the initial values I selected for this project:
 
 ```bash
 #C++ Implementation
@@ -92,11 +92,11 @@ static const vector<double> INCREMENT = {0.000001, 0.000000001, 0.00001}; # Dp v
 static const int MAX_STEPS = 7;
 ```
 
-Overall, the basis of the constants were sufficient to drive the car w/o the Twiddle Algorithm. On the flip side, when the twiddle algorithm was used the corners were handles much more smoothly. 
+Overall, the basis of the constants was sufficient to drive the car w/o the Twiddle Algorithm. On the flip side, when the twiddle algorithm was used the corners were handles much more smoothly. 
 
 ### Basic Build Instructions
 
-First download the latest [Term 2 Simulator.](https://github.com/udacity/self-driving-car-sim/releases)
+First, download the latest [Term 2 Simulator.](https://github.com/udacity/self-driving-car-sim/releases)
 
 [Note] You may have to set the simulator to an executable file using:
 
