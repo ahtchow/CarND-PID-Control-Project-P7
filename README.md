@@ -5,7 +5,7 @@ Udacity Self-Driving Car Nanodegree - PID Controller Project
 
 View the project run via my [youtube video!](https://youtu.be/PCT97GeUd7U)
 
-## Overview 
+## Overview
 The following project explores the controller-based approach to lane driving, as opposed to deep learning as seen in the [CarND-Behavioural-Cloning project.](https://github.com/ahtchow/CarND-BehaviouralCloning-P3) A more classical approach like using a controller can prove to have some benefits, especially if paired with deep learning (two approaches on opposite sides of the spectrum). Simply put, driving in the center of the lane can be much simpler if left in the hands of a feedback controller such as the proportional–integral–derivative controller. The objective of the controller is to tune the steering angle, through continuously adjusting hyperparameters based on error. Let's see how I did it!
 
 ## Goal of the Project
@@ -86,15 +86,15 @@ Though the basis of the algorithm was identical, the tuning was done in small in
 ```bash
 #C++ Implementation
 
-static constexpr double tau_p = 0.09; #P constant
+static constexpr double tau_p = 0.15; #P constant
 static constexpr double tau_i = 0.0004; #I constant
-static constexpr double tau_d = 1.7; #D constant
+static constexpr double tau_d = 5.0; #D constant
 static constexpr double THROTTLE = 0.3; # Constant Throttling
 static const vector<double> INCREMENT = {0.000001, 0.000000001, 0.00001}; # Dp variables for twiddle algorithm
 static const int MAX_STEPS = 7;
 ```
 
-Overall, the basis of the constants was sufficient to drive the car w/o the Twiddle Algorithm. On the flip side, when the twiddle algorithm was used the corners were handles much more smoothly. 
+Overall, the basis of the constants was sufficient to drive the car w/o the Twiddle Algorithm. On the flip side, when the twiddle algorithm was used the corners were handles much more smoothly.
 
 ### Basic Build Instructions
 
@@ -130,7 +130,7 @@ chmod +x filename
   * Run either `./install-mac.sh` or `./install-ubuntu.sh`.
   * If you install from source, checkout to commit `e94b6e1`, i.e.
     ```
-    git clone https://github.com/uWebSockets/uWebSockets 
+    git clone https://github.com/uWebSockets/uWebSockets
     cd uWebSockets
     git checkout e94b6e1
     ```
