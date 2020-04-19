@@ -3,6 +3,8 @@ Udacity Self-Driving Car Nanodegree - PID Controller Project
 
 ![Driving](img/PREVIEW.png)
 
+View the project run via my [youtube video!](https://youtu.be/uTHCYhuXINA)
+
 ## Overview 
 The following project explores the controller-based approach to lane driving, as opposed to deep learning as seen in the [CarND-Behavioural-Cloning project.](https://github.com/ahtchow/CarND-BehaviouralCloning-P3) A more classical approach like using a controller can prove to have some benefits, especially if paired with deep learning (two approaches on opposite sides of the spectrum). Simply put, driving in the center of the lane can be much simpler if left in the hands of a feedback controller such as the proportional–integral–derivative controller. The objective of the controller is to tune the steering angle, through continuously adjusting hyperparameters based on error. Let's see how I did it!
 
