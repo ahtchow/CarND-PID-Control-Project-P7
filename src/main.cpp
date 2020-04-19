@@ -9,9 +9,9 @@
 using nlohmann::json;
 using std::string;
 
-static constexpr double tau_p = 0.09;
+static constexpr double tau_p = 0.15;
 static constexpr double tau_i = 0.0004;
-static constexpr double tau_d = 1.7;
+static constexpr double tau_d = 5.0;
 static constexpr double THROTTLE = 0.3;
 static const vector<double> INCREMENT = {0.000001, 0.000000001, 0.00001};
 static const int MAX_STEPS = 7;
@@ -44,7 +44,7 @@ int main() {
   PID pid;
   pid.Init(tau_p,tau_i,tau_d);
 
-  h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, 
+  h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                      uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
@@ -62,7 +62,7 @@ int main() {
           double speed = std::stod(j[1]["speed"].get<string>());
           double angle = std::stod(j[1]["steering_angle"].get<string>());
           double steer_value;
-          
+
           pid.UpdateError(cte);
           steer_value = pid.TotalError();
           //Update Params
@@ -95,7 +95,7 @@ int main() {
     std::cout << "Connected!!!" << std::endl;
   });
 
-  h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code, 
+  h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code,
                          char *message, size_t length) {
     ws.close();
     std::cout << "Disconnected" << std::endl;
@@ -108,6 +108,6 @@ int main() {
     std::cerr << "Failed to listen to port" << std::endl;
     return -1;
   }
-  
+
   h.run();
 }
