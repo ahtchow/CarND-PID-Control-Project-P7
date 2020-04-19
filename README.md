@@ -45,7 +45,7 @@ The Derivative aspect of the controller measures the rate of change "Cross Track
   *  (d/dt) * CTE -> Change in Cross Track Error Overtime
 
 ### Twiddle Algorithm - Hyperparameter Tuning [τ_p, τ_i, τ_d]
-An common algorithm refered to the ["TWIDDLE" ALGORITHIM](https://martin-thoma.com/twiddle/) was implemented to search for the best hyperparameters in [τ_p, τ_i, τ_d]. Here is pythonic pseudo code:
+A common algorithm refered to the ["TWIDDLE" ALGORITHIM](https://martin-thoma.com/twiddle/) was implemented to search for the best hyperparameters in [τ_p, τ_i, τ_d]. Here is pythonic pseudo code:
 
 ```bash
 # Choose an initialization parameter vector
@@ -83,11 +83,12 @@ Though the basis of the algorithm were identical, the tuning was done in small i
 
 ```bash
 #C++ Implementation
-static constexpr double tau_p = 0.09;
-static constexpr double tau_i = 0.0004;
-static constexpr double tau_d = 1.7;
-static constexpr double THROTTLE = 0.3;
-static const vector<double> INCREMENT = {0.000001, 0.000000001, 0.00001};
+
+static constexpr double tau_p = 0.09; #P constant
+static constexpr double tau_i = 0.0004; #I constant
+static constexpr double tau_d = 1.7; #D constant
+static constexpr double THROTTLE = 0.3; # Constant Throttling
+static const vector<double> INCREMENT = {0.000001, 0.000000001, 0.00001}; # Dp variables for twiddle algorithm
 static const int MAX_STEPS = 7;
 ```
 
